@@ -4,7 +4,10 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/tarragonster/go-mcs-api-gateway/pkg/auth"
 	"github.com/tarragonster/go-mcs-api-gateway/pkg/config"
+	"github.com/tarragonster/go-mcs-api-gateway/pkg/order"
+	"github.com/tarragonster/go-mcs-api-gateway/pkg/product"
 )
 
 func main() {
@@ -15,6 +18,10 @@ func main() {
 	}
 
 	r := gin.Default()
+
+	authSvc := *auth.RegisterRoutes(r, &c)
+	order.RegisterRoutes(r, &c, &authSvc)
+	product.RegisterRoutes(r, &c, &authSvc)
 
 	r.Run(c.Port)
 }
